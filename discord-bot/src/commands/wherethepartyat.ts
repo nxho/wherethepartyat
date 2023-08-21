@@ -2,6 +2,14 @@ import { CommandInteraction, SlashCommandBuilder } from 'discord.js';
 import * as sqlite3 from 'sqlite3';
 import { resolve } from 'node:path';
 
+interface Event {
+  id: number;
+  name: string;
+  description: string;
+  datetime: string;
+  location: string;
+}
+
 const eventsDbPath = resolve(__dirname, '../../../pyscraper/events_database.db');
 const db = new sqlite3.Database(eventsDbPath, sqlite3.OPEN_READONLY, (err) => {
   if (err) {
@@ -11,7 +19,7 @@ const db = new sqlite3.Database(eventsDbPath, sqlite3.OPEN_READONLY, (err) => {
   }
 });
 
-const fetchAllEvents = () => {
+const fetchAllEvents = (): Promise<Event[]> => {
   return new Promise((resolve, reject) => {
     const query = 'SELECT * FROM events';
     db.all(query, [], (err, rows) => {
@@ -21,7 +29,7 @@ const fetchAllEvents = () => {
       } else {
         // Process the retrieved rows
         console.log('Query result:', rows);
-        resolve(rows);
+        resolve(rows as Event[]);
       }
 
       // Close the database connection
@@ -45,7 +53,6 @@ export async function execute(interaction: CommandInteraction) {
   await interaction.deferReply();
 
   const events = await fetchAllEvents();
-  console.log('fetched events', events);
 
-  await interaction.editReply('Hey!');
+  await interaction.editReply(JSON.stringify(events, null, 2));
 }
