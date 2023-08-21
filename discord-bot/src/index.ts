@@ -1,5 +1,4 @@
 import { Client } from 'discord.js';
-import express from 'express';
 
 import { config } from './config';
 import { commands } from './commands';
@@ -25,22 +24,3 @@ client.on('interactionCreate', async (interaction) => {
 });
 
 client.login(config.DISCORD_TOKEN);
-
-const app = express();
-app.get('/healthz', async (_req, res, _next) => {
-  const healthcheck = {
-    uptime: process.uptime(),
-    message: 'OK',
-    timestamp: Date.now(),
-  };
-
-  try {
-    res.send(healthcheck);
-  } catch (error) {
-    healthcheck.message = error as string;
-    res.status(503).send();
-  }
-});
-
-const PORT = process.env.PORT || 4111;
-app.listen(PORT, () => console.log('Healthcheck has started at port ' + PORT));
