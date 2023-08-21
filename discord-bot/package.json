@@ -1,15 +1,14 @@
 {
   "name": "wherethepartyat",
   "packageManager": "yarn@3.6.2",
-  "description": "",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
+    "start:prod": "ts-node --transpile-only src/index.ts",
     "deploy": "ts-node src/deploy-commands.ts",
     "format": "prettier . --write"
   },
-  "author": "",
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.395.0",
@@ -29,6 +28,9 @@
     "typescript": "^5.1.6"
   },
   "volta": {
-    "node": "18.17.1"
+    "node": "16.20.2"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }
