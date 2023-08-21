@@ -20,7 +20,6 @@ export async function deployCommands({ guildId }: DeployCommandsProps) {
   console.log('Successfully reloaded application (/) commands.');
 }
 
-const hacksHacksHacksGuildId = '1090387306965385338';
-deployCommands({ guildId: hacksHacksHacksGuildId }).catch((e) => {
+deployCommands({ guildId: config.HHH_GUILD_ID }).catch((e) => {
   console.error(e);
 });
