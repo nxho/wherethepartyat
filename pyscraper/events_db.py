@@ -1,8 +1,10 @@
 import sqlite3
 
+events_db_path = '../events_database.db'
+
 def init_db():
     print("Creating 'events' database")
-    conn = sqlite3.connect('events_database.db')
+    conn = sqlite3.connect(events_db_path)
     cursor = conn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS events (
         id INTEGER PRIMARY KEY,
@@ -15,7 +17,7 @@ def init_db():
     conn.close()
 
 def persist_events(events):
-    conn = sqlite3.connect('events_database.db')
+    conn = sqlite3.connect(events_db_path)
     cursor = conn.cursor()
     for event in events:
         cursor.execute("INSERT INTO events (name, description, datetime, location) VALUES (?, ?, ?, ?)",
@@ -24,7 +26,7 @@ def persist_events(events):
     conn.close()
 
 def get_all_events():
-    conn = sqlite3.connect('events_database.db')
+    conn = sqlite3.connect(events_db_path)
     cursor = conn.cursor()
     cursor.execute('SELECT * from events')
     results = cursor.fetchall()

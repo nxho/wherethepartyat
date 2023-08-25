@@ -9,6 +9,7 @@ const {
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
   HHH_GUILD_ID,
+  EVENTS_DB_PATH,
 } = process.env;
 
 if (
@@ -29,4 +30,5 @@ export const config = {
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
   HHH_GUILD_ID,
+  EVENTS_DB_PATH,
 };

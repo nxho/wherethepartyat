@@ -1,6 +1,7 @@
 import { CommandInteraction, SlashCommandBuilder } from 'discord.js';
 import * as sqlite3 from 'sqlite3';
 import { resolve } from 'node:path';
+import { config } from '../config';
 
 interface Event {
   id: number;
@@ -10,7 +11,8 @@ interface Event {
   location: string;
 }
 
-const eventsDbPath = resolve(__dirname, '../../../pyscraper/events_database.db');
+const eventsDbPath = config.EVENTS_DB_PATH ?? resolve(__dirname, '../../../events_database.db');
+
 const db = new sqlite3.Database(eventsDbPath, sqlite3.OPEN_READONLY, (err) => {
   if (err) {
     console.error('Error opening database:', err.message);
