@@ -1,0 +1,16 @@
+services:
+  discord-bot:
+    build: ./discord-bot/
+    volumes:
+      - ./discord-bot/.env:/home/node/app/.env
+      - type: bind
+        source: ./events_database.db
+        target: /home/node/app/events_database.db
+      - type: bind
+        source: ./discord-bot/src
+        target: /home/node/app/src
+    environment:
+      - EVENTS_DB_PATH=/home/node/app/events_database.db
+  upload-service:
+    build: ./pyscraper/
+    # TODO: expose necessary ports
