@@ -1,6 +1,8 @@
 import sqlite3
+import os
+from os.path import abspath
 
-events_db_path = '../events_database.db'
+events_db_path = os.getenv('EVENTS_DB_PATH') or abspath('../events_database.db')
 
 def init_db():
     print("Creating 'events' database")

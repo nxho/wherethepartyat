@@ -13,7 +13,13 @@ services:
       - EVENTS_DB_PATH=/home/node/app/events_database.db
   upload-service:
     build: ./pyscraper/
+    volumes:
+      - ./discord-bot/.env:/usr/src/app/.env
+      - type: bind
+        source: ./events_database.db
+        target: /usr/src/app/events_database.db
     ports:
       - 80:5000
     environment:
-      - IMAGES_PATH=/home/node/app/static/uploads
+      - IMAGES_PATH=/usr/src/app/static/uploads
+      - EVENTS_DB_PATH=/usr/src/app/events_database.db

@@ -12,7 +12,7 @@ load_dotenv()
 # secrets
 aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID')
 aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
-openai_api_key=os.getenv('OPENAI_API_KEY')
+openai_api_key=os.getenv('OPEN_AI_KEY')
 
 system_prompt='''
 You will be given raw text, broken up into sections. Each section of raw text represents an event.
@@ -78,6 +78,7 @@ def send_to_gpt(lines):
     }
 
     response = requests.post('https://api.openai.com/v1/chat/completions', headers=headers, json=data)
+    print("GPT JSON response", response.json())
 
     event = response.json()['choices'][0]['message']['content'].strip()
     return json.loads(event)
