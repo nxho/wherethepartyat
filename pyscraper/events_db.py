@@ -34,7 +34,3 @@ def get_all_events():
     results = cursor.fetchall()
     conn.close()
     return results
-
-if __name__ == "__main__":
-    # init_db()
-    get_all_events()

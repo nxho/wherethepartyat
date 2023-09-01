@@ -85,42 +85,42 @@ def send_to_gpt(lines):
 
 def stories_to_text():
     events = []
-    try:
-        s3 = boto3.resource('s3', region_name='us-east-2', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
-        bucket_name = 'wherethepartyatimgdata'
+    s3 = boto3.resource('s3', region_name='us-east-2', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
+    bucket_name = 'wherethepartyatimgdata'
 
-        bucket=s3.Bucket(bucket_name)
-        image_keys = [obj.key for obj in bucket.objects.all() if obj.key.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', '.gif'))]
+    bucket=s3.Bucket(bucket_name)
+    image_keys = [obj.key for obj in bucket.objects.all() if obj.key.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', '.gif'))]
 
-        for image in image_keys:
-            obj = s3.Object(bucket_name, image)
+    for image in image_keys:
+        obj = s3.Object(bucket_name, image)
 
-            # Read the binary data of the image file
-            image_bytes = obj.get()['Body'].read()
+        # Read the binary data of the image file
+        image_bytes = obj.get()['Body'].read()
 
-            # Set up the Textract client with the desired region
-            client = boto3.client('textract', region_name='us-east-2', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
+        # Set up the Textract client with the desired region
+        client = boto3.client('textract', region_name='us-east-2', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
 
-            # Call the Textract API to extract text from the image
-            response = client.detect_document_text(Document={'Bytes': image_bytes})
+        # Call the Textract API to extract text from the image
+        response = client.detect_document_text(Document={'Bytes': image_bytes})
 
-            # Print the extracted text
-            lines = []
-            for item in response['Blocks']:
-                if item['BlockType'] == 'LINE':
-                    lines.append(item['Text'])
+        # Print the extracted text
+        lines = []
+        for item in response['Blocks']:
+            if item['BlockType'] == 'LINE':
+                lines.append(item['Text'])
 
-            if lines:
-                print(f'Text extracted from image: {image}')
-                print('\n'.join(lines))
+        if lines:
+            print(f'Text extracted from image: {image}')
+            print('\n'.join(lines))
+            try:
                 event = send_to_gpt(lines)
                 event['account'] = image.split(';')[0]
                 events.append(event)
-            else:
-                print('No text found in the image.')
-    except Exception as e:
-        print(f'Error processing image: {e}')
-        traceback.print_exc()
+            except Exception as e:
+                print(f'Error occurred when sending image text to GPT: {e}')
+                traceback.print_exc()
+        else:
+            print('No text found in the image.')
 
     return events
 
