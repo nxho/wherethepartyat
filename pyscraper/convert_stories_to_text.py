@@ -5,6 +5,7 @@ import requests
 from events_db import persist_events
 import json
 import traceback
+from os.path import abspath
 
 load_dotenv()
 
@@ -27,6 +28,8 @@ If the data from the extracted text does not look like an event, set the 'event'
 Otherwise, set the 'event' boolean to true.
 '''
 
+images_path = os.getenv('IMAGES_PATH') or abspath('../static/uploads')
+
 def upload_stories_to_s3():
     s3 = boto3.client('s3',
                       aws_access_key_id=aws_access_key_id,
@@ -34,11 +37,9 @@ def upload_stories_to_s3():
                       region_name='us-east-2')
     bucket_name = 'wherethepartyatimgdata'
 
-    path_to_stories = "/Users/babydeepthought/Documents/ncharge2/extensions/pyscraper/stories"
-
-    for filename in os.listdir(path_to_stories):
-        if os.path.isfile(os.path.join(path_to_stories, filename)):
-            file_path = f"{path_to_stories}/{filename}"
+    for filename in os.listdir(images_path):
+        if os.path.isfile(os.path.join(images_path, filename)):
+            file_path = f"{images_path}/{filename}"
             s3_key = filename  # Key (path) in S3 where the file will be stored
 
             print(f"Uploading file '{file_path}' to '{bucket_name}/{s3_key}'")

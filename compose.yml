@@ -13,4 +13,7 @@ services:
       - EVENTS_DB_PATH=/home/node/app/events_database.db
   upload-service:
     build: ./pyscraper/
-    # TODO: expose necessary ports
+    ports:
+      - 80:5000
+    environment:
+      - IMAGES_PATH=/home/node/app/static/uploads
