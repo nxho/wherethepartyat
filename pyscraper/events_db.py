@@ -22,8 +22,8 @@ def persist_events(events):
     conn = sqlite3.connect(events_db_path)
     cursor = conn.cursor()
     for event in events:
-        cursor.execute("INSERT INTO events (account, name, description, datetime, location) VALUES (?, ?, ?, ?, ?)",
-                       (event['account'], event['name'], event['description'], event['datetime'], event['location']))
+        cursor.execute("INSERT INTO events (account, name, description, datetime, location, image_url) VALUES (?, ?, ?, ?, ?, ?)",
+                       (event['account'], event['name'], event['description'], event['datetime'], event['location'], event['image_url']))
     conn.commit()
     conn.close()
 
@@ -34,3 +34,6 @@ def get_all_events():
     results = cursor.fetchall()
     conn.close()
     return results
+
+if __name__ == '__main__':
+    init_db()

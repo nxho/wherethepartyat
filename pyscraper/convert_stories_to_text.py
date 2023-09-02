@@ -85,6 +85,20 @@ def send_to_gpt(lines):
     event = response.json()['choices'][0]['message']['content'].strip()
     return json.loads(event)
 
+def create_presigned_url(bucket_name, object_name, expiration=60000):
+    """Generate a presigned URL to share an S3 object"""
+    try:
+        response = s3.generate_presigned_url('get_object',
+                                                Params={'Bucket': bucket_name,
+                                                        'Key': object_name},
+                                                ExpiresIn=expiration)
+    except Exception as e:
+        print(e)
+        return None
+    
+    # The response contains the presigned URL
+    return response
+
 def stories_to_text():
     events = []
     s3 = boto3.resource('s3', region_name='us-east-2', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
@@ -117,6 +131,11 @@ def stories_to_text():
             try:
                 event = send_to_gpt(lines)
                 event['account'] = image.split(';')[0]
+
+                # Generate a pre-signed URL for the image
+                pre_signed_url = create_presigned_url(bucket_name, image)
+                event['image_url'] = pre_signed_url
+
                 events.append(event)
             except Exception as e:
                 print(f'Error occurred when sending image text to GPT: {e}')
