@@ -55,7 +55,7 @@ export async function execute(interaction: CommandInteraction) {
   await interaction.deferReply();
 
   const events = await fetchAllEvents();
-  events.map((e) => {
+  const reply = events.map((e) => {
     const pretty_events = {
       name: e.name,
       value: `💬${e.description}\n📍${e.location}\n📆${e.datetime}`,
@@ -65,5 +65,5 @@ export async function execute(interaction: CommandInteraction) {
 
   })
 
-  await interaction.editReply(JSON.stringify(events, null, 2));
+  await interaction.editReply(JSON.stringify(reply,null,2));
 }
