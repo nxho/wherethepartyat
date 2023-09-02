@@ -14,7 +14,8 @@ def init_db():
         description TEXT,
         datetime TEXT,
         location TEXT,
-        account TEXT
+        account TEXT,
+        image_url TEXT
     )''')
     conn.close()
 
