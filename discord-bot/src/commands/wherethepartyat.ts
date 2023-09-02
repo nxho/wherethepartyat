@@ -23,7 +23,7 @@ const db = new sqlite3.Database(eventsDbPath, sqlite3.OPEN_READONLY, (err) => {
 
 const fetchAllEvents = (): Promise<Event[]> => {
   return new Promise((resolve, reject) => {
-    const query = 'SELECT * FROM events';
+    const query = 'SELECT * FROM events limit 5';
     db.all(query, [], (err, rows) => {
       if (err) {
         console.error('Error executing query:', err.message);
@@ -55,6 +55,15 @@ export async function execute(interaction: CommandInteraction) {
   await interaction.deferReply();
 
   const events = await fetchAllEvents();
+  events.map((e) => {
+    const pretty_events = {
+      name: e.name,
+      value: `💬${e.description}\n📍${e.location}\n📆${e.datetime}`,
+    };
+
+    return pretty_events;
+
+  })
 
   await interaction.editReply(JSON.stringify(events, null, 2));
 }
