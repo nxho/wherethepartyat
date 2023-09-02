@@ -56,7 +56,7 @@ export async function execute(interaction: CommandInteraction) {
 
   const events = await fetchAllEvents();
   const reply = events.map((e) => {
-    return `name: ${e.name}\n💬${e.description}\n📍${e.location}\n📆${e.datetime}`
+    return `Event: ${e.name}\n💬${e.description}\n📍${e.location}\n📆${e.datetime}`
   }).join('\n\n')
 
   await interaction.editReply(reply);
