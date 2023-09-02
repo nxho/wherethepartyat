@@ -63,12 +63,12 @@ export async function execute(interaction: CommandInteraction) {
     await interaction.editReply('An error occurred while fetching events.');
   } finally {
     // Close the database connection
-    db.close((err) => {
-      if (err) {
-        console.error('Error closing database:', err.message);
-      } else {
-        console.log('Database connection closed');
-      }
-    });
+    // db.close((err) => {
+    //   if (err) {
+    //     console.error('Error closing database:', err.message);
+    //   } else {
+    //     console.log('Database connection closed');
+    //   }
+    // });
   }
 }
