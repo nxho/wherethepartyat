@@ -34,16 +34,6 @@ const fetchAllEvents = (): Promise<Event[]> => {
         console.log('Query result:', rows);
         resolve(rows as Event[]);
       }
-
-      // Close the database connection
-      db.close((err) => {
-        if (err) {
-          console.error('Error closing database:', err.message);
-          reject(err.message);
-        } else {
-          console.log('Database connection closed');
-        }
-      });
     });
   });
 };
@@ -55,6 +45,7 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction: CommandInteraction) {
   await interaction.deferReply();
 
+  try {
   const events = await fetchAllEvents();
   const reply = events.map((e) => {
     const eventName = e.name || "Untitled Event :)";
@@ -67,4 +58,17 @@ export async function execute(interaction: CommandInteraction) {
   }).join('\n\n');
   
   await interaction.editReply(reply);
+  } catch (error) {
+    console.error('Error:', error);
+    await interaction.editReply('An error occurred while fetching events.');
+  } finally {
+    // Close the database connection
+    db.close((err) => {
+      if (err) {
+        console.error('Error closing database:', err.message);
+      } else {
+        console.log('Database connection closed');
+      }
+    });
+  }
 }
