@@ -42,7 +42,7 @@ export async function execute(interaction: CommandInteraction) {
         const eventDatetime = e.datetime || '?';
         const image_url= e.image_url || 'I have no idea where we got this event from actually';
 
-        return `Event: ${eventName}\n💬${eventDescription}\n🗣️${eventAccount}\n📍${eventLocation}\n📆${eventDatetime}\n🔗 <[image](${image_url})>`;
+        return `Event: ${eventName}\n💬${eventDescription}\n🗣️${eventAccount}\n📍${eventLocation}\n📆${eventDatetime}\n🔗 [Original Post](${image_url})`;
       })
       .join('\n\n');
 
