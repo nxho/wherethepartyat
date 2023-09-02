@@ -57,7 +57,7 @@ export async function execute(interaction: CommandInteraction) {
 
   const events = await fetchAllEvents();
   const reply = events.map((e) => {
-    const eventName = e.name || "?";
+    const eventName = e.name || "Untitled Event :)";
     const eventDescription = e.description || "?";
     const eventAccount = e.account || "?";
     const eventLocation = e.location || "?";
