@@ -35,7 +35,6 @@ set the 'account' string to that text value. Otherwise, set the 'account' string
 
 static_path = os.getenv('STATIC_PATH') or abspath('../static')
 images_path = f'{static_path}/uploads'
-processed_path = f'{static_path}/processed'
 
 def upload_stories_to_s3():
     s3 = boto3.client('s3',
@@ -56,10 +55,9 @@ def upload_stories_to_s3():
 
             logging.info(f"Successfully uploaded file '{file_path}' to '{bucket_name}/{s3_key}'")
 
-            dst_file_path = f"{processed_path}/{filename}"
-            os.rename(file_path, dst_file_path)
+            os.remove(file_path)
 
-            logging.info(f"Successfully moved source file from '{file_path}' to '{dst_file_path}'")
+            logging.info(f"Successfully removed source file at '{file_path}'")
     logging.info('Finished upload to S3')
 
 def send_to_gpt(lines):
@@ -105,10 +103,11 @@ def create_presigned_url(bucket_name, object_name, expiration=60000):
     """Generate a presigned URL to share an S3 object"""
     try:
         response = s3.generate_presigned_url('get_object',
-                                                Params={'Bucket': bucket_name,
-                                                        "ResponseContentType": "image/jpeg"
-                                                        'Key': object_name},
-                                                ExpiresIn=expiration)
+                                            Params={
+                                                'Bucket': bucket_name,
+                                                "ResponseContentType": "image/jpeg",
+                                                'Key': object_name},
+                                            ExpiresIn=expiration)
     except Exception as e:
         logging.error(e)
         return None
@@ -171,8 +170,6 @@ if __name__ == "__main__":
                         format='%(asctime)s - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
     logging.info('Starting event generation')
-
-    Path(processed_path).mkdir(parents=True, exist_ok=True)
 
     upload_stories_to_s3()
     events = stories_to_text()
