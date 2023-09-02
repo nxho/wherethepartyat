@@ -67,7 +67,4 @@ export async function execute(interaction: CommandInteraction) {
   }).join('\n\n');
   
   await interaction.editReply(reply);
-  
-
-  await interaction.editReply(reply);
 }
