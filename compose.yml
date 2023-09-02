@@ -15,6 +15,7 @@ services:
       - 80:5000
     environment:
       - STATIC_PATH=/etc/data/static
+      - EVENTS_DB_PATH=/etc/data/events_database.db
   cron:
     build:
       context: ./pyscraper
