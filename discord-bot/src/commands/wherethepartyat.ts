@@ -50,3 +50,8 @@ export async function execute(interaction: CommandInteraction) {
     await interaction.editReply('Something went super wrong!');
   }
 }
+
+process.on('exit', () => db.close());
+process.on('SIGHUP', () => process.exit(128 + 1));
+process.on('SIGINT', () => process.exit(128 + 2));
+process.on('SIGTERM', () => process.exit(128 + 15));
