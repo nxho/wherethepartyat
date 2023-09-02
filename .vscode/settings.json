@@ -1,0 +1,6 @@
+{
+  "prettier.configPath": "discord-bot/.prettierrc.js",
+  "prettier.prettierPath": "discord-bot/node_modules/prettier",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
