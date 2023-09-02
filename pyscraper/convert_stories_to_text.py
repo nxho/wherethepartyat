@@ -106,6 +106,7 @@ def create_presigned_url(bucket_name, object_name, expiration=60000):
     try:
         response = s3.generate_presigned_url('get_object',
                                                 Params={'Bucket': bucket_name,
+                                                        "ResponseContentType": "image/jpeg"
                                                         'Key': object_name},
                                                 ExpiresIn=expiration)
     except Exception as e:
