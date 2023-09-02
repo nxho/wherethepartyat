@@ -86,6 +86,10 @@ def send_to_gpt(lines):
     return json.loads(event)
 
 def create_presigned_url(bucket_name, object_name, expiration=60000):
+    s3 = boto3.client('s3',
+                      aws_access_key_id=aws_access_key_id,
+                      aws_secret_access_key=aws_secret_access_key,
+                      region_name='us-east-2')
     """Generate a presigned URL to share an S3 object"""
     try:
         response = s3.generate_presigned_url('get_object',
