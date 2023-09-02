@@ -20,7 +20,7 @@ const db = new Database(eventsDbPath, {
 });
 
 const fetchAllEvents = (): Event[] => {
-  const stmt = db.prepare('SELECT * FROM events ORDER BY RANDOM() limit 5');
+  const stmt = db.prepare('SELECT * FROM events ORDER BY RANDOM() limit 3');
   return stmt.all() as Event[];
 };
 
