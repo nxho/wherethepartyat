@@ -35,3 +35,8 @@ def get_all_events():
     results = cursor.fetchall()
     conn.close()
     return results
+
+if __name__ == '__main__':
+    if not os.path.isfile(events_db_path):
+        print(f"Events database not found at '{events_db_path}', initializing database")
+        init_db()

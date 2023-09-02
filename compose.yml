@@ -3,23 +3,27 @@ services:
     build: ./discord-bot/
     volumes:
       - ./discord-bot/.env:/home/node/app/.env
-      - type: bind
-        source: ./events_database.db
-        target: /home/node/app/events_database.db
-      - type: bind
-        source: ./discord-bot/src
-        target: /home/node/app/src
+      - data:/etc/data
     environment:
-      - EVENTS_DB_PATH=/home/node/app/events_database.db
+      - EVENTS_DB_PATH=/etc/data/events_database.db
   upload-service:
     build: ./pyscraper/
     volumes:
       - ./discord-bot/.env:/usr/src/app/.env
-      - type: bind
-        source: ./events_database.db
-        target: /usr/src/app/events_database.db
+      - data:/etc/data
     ports:
       - 80:5000
     environment:
-      - IMAGES_PATH=/usr/src/app/static/uploads
-      - EVENTS_DB_PATH=/usr/src/app/events_database.db
+      - STATIC_PATH=/etc/data/static
+  cron:
+    build:
+      context: ./pyscraper
+      dockerfile: Dockerfile.cron
+    volumes:
+      - ./discord-bot/.env:/usr/src/app/.env
+      - data:/etc/data
+    environment:
+      - STATIC_PATH=/etc/data/static
+      - EVENTS_DB_PATH=/etc/data/events_database.db
+volumes:
+  data:

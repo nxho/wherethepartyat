@@ -1,14 +1,16 @@
-from flask import Flask, render_template, request, redirect, url_for
 import os
-from werkzeug.utils import secure_filename
 from os.path import abspath
+from pathlib import Path
 
-images_path = os.getenv('IMAGES_PATH') or abspath('../static/uploads')
+from flask import Flask, render_template, request
+from werkzeug.utils import secure_filename
+
+static_path = os.getenv('STATIC_PATH') or abspath('../static')
+upload_path = f'{static_path}/uploads'
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = images_path
+app.config['UPLOAD_FOLDER'] = upload_path
 app.config['ALLOWED_EXTENSIONS'] = {'jpg', 'jpeg', 'png'}
-
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -38,4 +40,5 @@ def uploaded_file(filename):
     return f"Uploaded image: {filename}"
 
 if __name__ == '__main__':
+    Path(upload_path).mkdir(parents=True, exist_ok=True)
     app.run(debug=True, host='0.0.0.0')
