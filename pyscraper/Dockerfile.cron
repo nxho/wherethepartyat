@@ -8,17 +8,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY convert_stories_to_text.py events_db.py run_cron_job.sh ./
 
-# Add crontab file in the cron directory
-COPY crontab /etc/cron.d/convert-cron
-
-# Give execution rights on the cron job
-RUN chmod 0644 /etc/cron.d/convert-cron
-
-# Create the log file to be able to run tail
+ADD crontab.txt ./crontab.txt
+COPY entry.sh ./entry.sh
+RUN chmod 755 ./run_cron_job.sh ./entry.sh
+RUN /usr/bin/crontab ./crontab.txt
 RUN touch /var/log/cron.log
 
-# Install Cron
-RUN apt-get update
-RUN apt-get -y install cron
-
-CMD python events_db.py && cron && tail -f /var/log/cron.log
+CMD python events_db.py && ./entry.sh && tail -f /var/log/cron.log

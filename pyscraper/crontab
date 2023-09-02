@@ -1,1 +1,0 @@
-* * * * * root /usr/src/app/run_cron_job.sh >> /var/log/cron.log 2>&1
