@@ -10,6 +10,7 @@ interface Event {
   datetime: string;
   location: string;
   account: string;
+  image_url: string;
 }
 
 const eventsDbPath = config.EVENTS_DB_PATH ?? resolve(__dirname, '../../../events_database.db');
@@ -39,8 +40,9 @@ export async function execute(interaction: CommandInteraction) {
         const eventAccount = e.account || '?';
         const eventLocation = e.location || '?';
         const eventDatetime = e.datetime || '?';
+        const image_url= e.image_url || 'I have no idea where we got this event from actually';
 
-        return `Event: ${eventName}\n💬${eventDescription}\n🗣️${eventAccount}\n📍${eventLocation}\n📆${eventDatetime}`;
+        return `Event: ${eventName}\n💬${eventDescription}\n🗣️${eventAccount}\n📍${eventLocation}\n📆${eventDatetime}\n🔗${image_url}`;
       })
       .join('\n\n');
 
