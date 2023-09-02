@@ -18,6 +18,7 @@ system_prompt='''
 You will be given raw text, broken up into sections. Each section of raw text represents an event.
 Take each section of text and return event details in the following JSON format:
 {
+  "account: string,
   "name": string,
   "description": string,
   "datetime": string,
@@ -25,7 +26,8 @@ Take each section of text and return event details in the following JSON format:
   "event": bool,
 }
 If the data from the extracted text does not look like an event, set the 'event' field to false.
-Otherwise, set the 'event' boolean to true.
+Otherwise, set the 'event' boolean to true. If the text has some text that appears to be an account or username,
+set the 'account' string to that text value. Otherwise, set the 'account' string to an empty string.
 '''
 
 images_path = os.getenv('IMAGES_PATH') or abspath('../static/uploads')

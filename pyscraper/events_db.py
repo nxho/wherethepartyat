@@ -13,7 +13,7 @@ def init_db():
         name TEXT,
         description TEXT,
         datetime TEXT,
-        location TEXT
+        location TEXT,
         account TEXT
     )''')
     conn.close()
@@ -22,8 +22,8 @@ def persist_events(events):
     conn = sqlite3.connect(events_db_path)
     cursor = conn.cursor()
     for event in events:
-        cursor.execute("INSERT INTO events (name, description, datetime, location) VALUES (?, ?, ?, ?)",
-                       (event['name'], event['description'], event['datetime'], event['location']))
+        cursor.execute("INSERT INTO events (account, name, description, datetime, location) VALUES (?, ?, ?, ?, ?)",
+                       (event['account'], event['name'], event['description'], event['datetime'], event['location']))
     conn.commit()
     conn.close()
 
