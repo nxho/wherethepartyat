@@ -1,5 +1,5 @@
 import { CommandInteraction, SlashCommandBuilder } from 'discord.js';
-import Database from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
 import { resolve } from 'node:path';
 import { config } from '../config';
 
@@ -40,7 +40,7 @@ export async function execute(interaction: CommandInteraction) {
         const eventAccount = e.account || '?';
         const eventLocation = e.location || '?';
         const eventDatetime = e.datetime || '?';
-        const image_url= e.image_url || 'I have no idea where we got this event from actually';
+        const image_url = e.image_url || 'I have no idea where we got this event from actually';
 
         return `Event: ${eventName}\n💬${eventDescription}\n🗣️${eventAccount}\n📍${eventLocation}\n📆${eventDatetime}\n🔗 [Original Post](${image_url})`;
       })

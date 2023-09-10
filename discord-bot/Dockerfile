@@ -1,18 +1,16 @@
-FROM node:16-alpine
+FROM oven/bun
 
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+RUN mkdir -p /home/bun/app/node_modules
+RUN chown -R bun:bun /home/bun/app/node_modules
 
-WORKDIR /home/node/app
+WORKDIR /home/bun/app
 
-COPY package.json yarn.lock .yarnrc.yml ./
-COPY .yarn ./.yarn
+COPY --chown=bun:bun package.json bun.lockb ./
 
-RUN chown -R node:node .yarn
+USER bun
 
-USER node
+RUN bun install --frozen-lockfile
 
-RUN yarn install --immutable
+COPY --chown=bun:bun . .
 
-COPY --chown=node:node . .
-
-CMD [ "yarn", "start:prod" ]
+CMD [ "bun", "start" ]
